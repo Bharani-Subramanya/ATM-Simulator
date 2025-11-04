@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ATM Login / Signup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .toggle-nav {
+      display: flex;
+      margin-bottom: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      padding: 8px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .toggle-nav span {
+      padding: 12px 30px;
+      cursor: pointer;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+      letter-spacing: 1px;
+      font-size: 14px;
+    }
+
+    .toggle-nav span.active {
+      background: linear-gradient(135deg, #ff6b6b, #ffa726);
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .switch-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .switch {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #ff6b6b, #ffa726);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .switch:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .arrow {
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .form-container {
+      perspective: 1000px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .side {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 40px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back {
+      transform: rotateY(180deg);
+    }
+
+    form {
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+      font-weight: 700;
+      font-size: 28px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .input-box {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 15px 50px 15px 15px;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.8);
+      color: #333;
+    }
+
+    .input-box input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+      background: white;
+    }
+
+    .input-box input:focus + label,
+    .input-box input:valid + label {
+      top: -8px;
+      left: 15px;
+      font-size: 12px;
+      color: #667eea;
+      background: white;
+      padding: 0 8px;
+      font-weight: 500;
+    }
+
+    .input-box label {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 16px;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+
+    .input-box .icon {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-size: 20px;
+      opacity: 0.7;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .forgot {
+      text-align: center;
+      margin-top: 15px;
+      color: #667eea;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    .msg {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 8px;
+      min-height: 20px;
+    }
+
+    .msg.success {
+      background: rgba(46, 204, 113, 0.1);
+      color: #27ae60;
+      border: 1px solid rgba(46, 204, 113, 0.3);
+    }
+
+    .msg.error {
+      background: rgba(231, 76, 60, 0.1);
+      color: #e74c3c;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    .msg.info {
+      background: rgba(52, 152, 219, 0.1);
+      color: #3498db;
+      border: 1px solid rgba(52, 152, 219, 0.3);
+    }
+
+    @media (max-width: 480px) {
+      .form-container {
+        max-width: 350px;
+      }
+      
+      .card {
+        height: 550px;
+      }
+      
+      .side {
+        padding: 30px 20px;
+      }
+      
+      h2 {
+        font-size: 24px;
+      }
+      
+      .toggle-nav span {
+        padding: 10px 20px;
+        font-size: 12px;
+      }
+    }
+
+    .loading {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Toggle Navigation -->
+  <div class="toggle-nav">
+    <span id="loginLabel" class="active">LOG IN</span>
+    <span id="signupLabel">SIGN UP</span>
+  </div>
+
+  <!-- Switch Button -->
+  <div class="switch-container">
+    <div class="switch" onclick="toggleForm()">
+      <span class="arrow">&#8592;</span>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <div class="form-container">
+    <div class="card" id="card">
+      <!-- Login Form -->
+      <div class="side front">
+        <form id="loginForm" autocomplete="off">
+          <h2>Log In</h2>
+          <div class="input-box">
+            <input type="text" name="cardNumber" required>
+            <label>Card Number</label>
+            <span class="icon">💳</span>
+          </div>
+          <div class="input-box">
+            <input type="password" name="pin" required maxlength="6">
+            <label>PIN</label>
+            <span class="icon">🔒</span>
+          </div>
+          <button type="submit" class="btn">ACCESS ATM</button>
+          <p class="forgot">Forgot your PIN?</p>
+          <p id="loginMsg" class="msg"></p>
+        </form>
+      </div>
+
+      <!-- Signup Form -->
+      <div class="side back">
+        <form id="signupForm" autocomplete="off">
+          <h2>Sign Up</h2>
+          <div class="input-box">
+            <input type="text" name="name" required minlength="2">
+            <label>Full Name</label>
+            <span class="icon">👤</span>
+          </div>
+          <div class="input-box">
+            <input type="email" name="email" required>
+            <label>Email Address</label>
+            <span class="icon">📧</span>
+          </div>
+          <div class="input-box">
+            <input type="text" name="cardNumber" required>
+            <label>Card Number</label>
+            <span class="icon">💳</span>
+          </div>
+          <div class="input-box">
+            <input type="password" name="pin" required maxlength="6">
+            <label>PIN (4-6 digits)</label>
+            <span class="icon">🔒</span>
+          </div>
+          <div class="input-box">
+            <input type="number" name="balance" min="0" step="0.01" placeholder="1000.00">
+            <label>Initial Balance</label>
+            <span class="icon">💰</span>
+          </div>
+          <button type="submit" class="btn">CREATE ACCOUNT</button>
+          <p id="signupMsg" class="msg"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Backend API URL
+    const API_URL = 'http://localhost:5000/api';
+
+    function toggleForm() {
+      const card = document.getElementById('card');
+      const arrow = document.querySelector('.arrow');
+      const loginLabel = document.getElementById('loginLabel');
+      const signupLabel = document.getElementById('signupLabel');
+      
+      card.classList.toggle('flipped');
+      loginLabel.classList.toggle('active');
+      signupLabel.classList.toggle('active');
+      arrow.innerHTML = card.classList.contains('flipped') ? '&#8594;' : '&#8592;';
+      clearMessages();
+    }
+
+    function clearMessages() {
+      document.getElementById("signupMsg").textContent = "";
+      document.getElementById("loginMsg").textContent = "";
+      document.getElementById("signupMsg").className = "msg";
+      document.getElementById("loginMsg").className = "msg";
+    }
+
+    function showMessage(elementId, message, type = 'info') {
+      const msgElement = document.getElementById(elementId);
+      msgElement.textContent = message;
+      msgElement.className = `msg ${type}`;
+    }
+
+    function validateCardNumber(cardNumber) {
+      const cleanCard = cardNumber.replace(/\s+/g, '');
+      return /^\d{4,16}$/.test(cleanCard);
+    }
+
+    function validatePIN(pin) {
+      return /^\d{4,6}$/.test(pin);
+    }
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Login form handler
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const cardNumber = formData.get('cardNumber').trim();
+      const pin = formData.get('pin');
+
+      clearMessages();
+
+      if (!validateCardNumber(cardNumber)) {
+        showMessage("loginMsg", "❌ Card number must be 4-16 digits", "error");
+        return;
+      }
+
+      if (!validatePIN(pin)) {
+        showMessage("loginMsg", "❌ PIN must be 4-6 digits", "error");
+        return;
+      }
+
+      const submitBtn = this.querySelector('.btn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "ACCESSING...";
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+
+      showMessage("loginMsg", "🔐 Verifying credentials...", "info");
+
+      try {
+        const response = await fetch(`${API_URL}/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            cardNumber: cardNumber,
+            pin: pin
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          localStorage.setItem('atmUser', JSON.stringify(data.user));
+          showMessage("loginMsg", "✅ Login successful! Redirecting...", "success");
+          
+          setTimeout(() => {
+            window.location.href = "atmsimulation.html";
+          }, 1500);
+        } else {
+          showMessage("loginMsg", data.message, "error");
+          submitBtn.textContent = originalText;
+          submitBtn.classList.remove('loading');
+          submitBtn.disabled = false;
+        }
+
+      } catch (error) {
+        console.error('Login error:', error);
+        showMessage("loginMsg", "❌ Connection error. Is the server running?", "error");
+        submitBtn.textContent = originalText;
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Signup form handler
+    document.getElementById("signupForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const name = formData.get('name').trim();
+      const email = formData.get('email').trim();
+      const cardNumber = formData.get('cardNumber').trim();
+      const pin = formData.get('pin');
+      const balance = formData.get('balance') || "1000.00";
+
+      clearMessages();
+
+      if (name.length < 2) {
+        showMessage("signupMsg", "❌ Name must be at least 2 characters", "error");
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        showMessage("signupMsg", "❌ Please enter a valid email address", "error");
+        return;
+      }
+
+      if (!validateCardNumber(cardNumber)) {
+        showMessage("signupMsg", "❌ Card number must be 4-16 digits", "error");
+        return;
+      }
+
+      if (!validatePIN(pin)) {
+        showMessage("signupMsg", "❌ PIN must be 4-6 digits", "error");
+        return;
+      }
+
+      if (parseFloat(balance) < 0) {
+        showMessage("signupMsg", "❌ Initial balance cannot be negative", "error");
+        return;
+      }
+
+      const submitBtn = this.querySelector('.btn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "CREATING...";
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+
+      showMessage("signupMsg", "📋 Creating your ATM account...", "info");
+
+      try {
+        const response = await fetch(`${API_URL}/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            cardNumber: cardNumber,
+            pin: pin,
+            balance: parseFloat(balance)
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showMessage("signupMsg", data.message, "success");
+          this.reset();
+          
+          setTimeout(() => {
+            if (document.getElementById('card').classList.contains('flipped')) {
+              toggleForm();
+            }
+          }, 2000);
+        } else {
+          showMessage("signupMsg", data.message, "error");
+        }
+
+        submitBtn.textContent = originalText;
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+
+      } catch (error) {
+        console.error('Signup error:', error);
+        showMessage("signupMsg", "❌ Connection error. Is the server running?", "error");
+        submitBtn.textContent = originalText;
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+    });
+
+    document.getElementById('loginLabel').addEventListener('click', function() {
+      if (document.getElementById('card').classList.contains('flipped')) {
+        toggleForm();
+      }
+    });
+
+    document.getElementById('signupLabel').addEventListener('click', function() {
+      if (!document.getElementById('card').classList.contains('flipped')) {
+        toggleForm();
+      }
+    });
+
+    document.addEventListener('keypress', function(e) {
+      if (e.target.name === 'pin' && !/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+    window.addEventListener('load', function() {
+      document.getElementById('loginForm').reset();
+      document.getElementById('signupForm').reset();
+      clearMessages();
+      localStorage.removeItem('atmUser');
+    });
+  </script>
+</body>
+</html>
